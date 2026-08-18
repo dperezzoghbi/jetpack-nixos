@@ -173,6 +173,10 @@ let
       inherit (nvidia-jetpack) flash-tools socFamily;
       flashCommands = ''
         (
+          # `convert.sh` needs the correct bsp root dir when using non-standard board config files.
+          LDK_DIR="$(realpath .)"
+          export LDK_DIR
+
           cd l4t/tools/flashtools/fuseburn
           ./fskp_fuseburn.py \
             --board-spec ${lib.escapeShellArg "${cfg.firmware.fskp.boardSpecFile}"} \

@@ -90,6 +90,8 @@ in
         bspPatches = [
           ./pkgs/r38-bsp.patch
           ./pkgs/r39-bsp-pkc-list-fixes.patch
+          ./pkgs/r39-bsp-firmware-variants.patch
+          ./pkgs/r39-bsp-flash-script-no-flash.patch
         ];
       }
       final
