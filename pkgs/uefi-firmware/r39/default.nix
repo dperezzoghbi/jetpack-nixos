@@ -42,7 +42,7 @@ let
     edk2-infineon.sha256 = "sha256-47UJfEd4ViTenx5dvy2G75NFSgmcsyIWpN0Lv1QlvA8=";
     edk2-redfish-client.sha256 = "sha256-Tq6dZu90T10FBVMYjYolm2WfAZc/cQe8dNuKXrK3RbE=";
     edk2-nvidia.sha256 = "sha256-1qFt5wv5Ay3/rB6JecyKdc3ldHhpdOeNLcdWvsUuK3U=";
-    edk2-nvidia-non-osi.sha256 = "sha256-xdIcdgmvFZgF2R8sjDVIrW8w2XLeDhI8kGpoW8gdNgE=";
+    edk2-nvidia-non-osi.sha256 = "sha256-QdwDTzA23GGXY1jqgzbc6oTnOmhJJY5cm5NgWLH1VE8=";
   };
 
   fetchRepo = name: value: fetchFromGitHub (defaultOrigin // { inherit name; repo = name; } // value);
