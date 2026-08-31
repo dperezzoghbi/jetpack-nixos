@@ -50,20 +50,23 @@ buildFromDebs {
   ];
   buildInputs = [ l4t-core l4t-cuda l4t-nvsci pango alsa-lib ] ++ (with gst_all_1; [ gstreamer gst-plugins-base ]);
 
-  patches = lib.optionals (l4tOlder "36") [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/OE4T/meta-tegra/af0a93313c13e9eac4e80082d8a8e8ac5f7ad6e8/recipes-multimedia/argus/files/0005-Remove-DO-NOT-USE-declarations-from-v4l2_nv_extensio.patch";
-      hash = "sha256-2PvlpGiz9evu3lc2R8nGYmC1jn8rqLo23dQ1cDvuCyo=";
-      stripLen = 1;
-      extraPrefix = "src/jetson_multimedia_api/";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/OE4T/meta-tegra/cc1c28f05fbd1b511d3bca3795dd9b6a35df5914/recipes-multimedia/argus/tegra-mmapi-samples/0004-samples-classes-fix-a-data-race-in-shutting-down-deq.patch";
-      hash = "sha256-4Sm2kPP44LRPVMFrLmowvWPec1sIV2LHATsNmIGKExo=";
-      stripLen = 1;
-      extraPrefix = "src/jetson_multimedia_api/";
-    })
-  ];
+  patches =
+    lib.optionals (l4tOlder "36") [
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/OE4T/meta-tegra/af0a93313c13e9eac4e80082d8a8e8ac5f7ad6e8/recipes-multimedia/argus/files/0005-Remove-DO-NOT-USE-declarations-from-v4l2_nv_extensio.patch";
+        hash = "sha256-2PvlpGiz9evu3lc2R8nGYmC1jn8rqLo23dQ1cDvuCyo=";
+        stripLen = 1;
+        extraPrefix = "src/jetson_multimedia_api/";
+      })
+    ]
+    ++ [
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/OE4T/meta-tegra/cc1c28f05fbd1b511d3bca3795dd9b6a35df5914/recipes-multimedia/argus/tegra-mmapi-samples/0004-samples-classes-fix-a-data-race-in-shutting-down-deq.patch";
+        hash = "sha256-4Sm2kPP44LRPVMFrLmowvWPec1sIV2LHATsNmIGKExo=";
+        stripLen = 1;
+        extraPrefix = "src/jetson_multimedia_api/";
+      })
+    ];
   postPatch = ''
     cp -r src/jetson_multimedia_api/{argus,include,samples} .
     rm -rf src
