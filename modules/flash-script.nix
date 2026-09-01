@@ -478,6 +478,9 @@ in
       }
     ];
 
+    # On thor, fskpFuseScript is the preferred method for fusing so enable it by default.
+    hardware.nvidia-jetpack.firmware.fskp.enable = lib.mkDefault (lib.hasPrefix "thor-" cfg.som);
+
     # These are from l4t_generate_soc_bup.sh, plus some additional ones found in the wild.
     hardware.nvidia-jetpack.firmware.variants =
       if (cfg.som != "generic") then
