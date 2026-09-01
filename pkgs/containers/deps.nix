@@ -5,7 +5,7 @@
 , l4tMajorMinorPatchVersion
 , l4tAtLeast
 , l4t-cuda
-, l4t-video-codec-openrm
+, l4t-video-codec-openrm ? null
 }:
 
 runCommand "container-deps" { nativeBuildInputs = [ dpkg ]; }
