@@ -85,10 +85,10 @@ index f5d88dd..bbd3e50 100644
          # Restore the active key label for L4T HSM
          # This is the key label for the key in HSM for signing
 
-diff --git a/l4t/tools/flashtools/flash/tegrasign_v3_internal.py b/l4t/tools/flashtools/flash/tegrasign_v3_internal.py
+diff --git a/tools/flashtools/flash/tegrasign_v3_internal.py b/tools/flashtools/flash/tegrasign_v3_internal.py
 index f5d88dd..bbd3e50 100755
---- a/l4t/tools/flashtools/flash/tegrasign_v3_internal.py
-+++ b/l4t/tools/flashtools/flash/tegrasign_v3_internal.py
+--- a/tools/flashtools/flash/tegrasign_v3_internal.py
++++ b/tools/flashtools/flash/tegrasign_v3_internal.py
 @@ -1241,22 +1241,54 @@ def is_key_list(filelistname, p_key, verbose):
          else:
              xml_str = comment + ElementTree.tostring(root)

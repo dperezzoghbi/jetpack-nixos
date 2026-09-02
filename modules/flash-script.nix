@@ -258,7 +258,14 @@ in
 
           boardSpecFile = mkOption {
             type = types.oneOf [ lib.types.path types.str ];
-            default = "${cfg.som}-board-spec.txt";
+            default = (
+              if cfg.som == "orin-nano" then
+                "orinnano-board-spec.txt"
+              else if cfg.som == "orin-nx" then
+                "orinnx-board-spec.txt"
+              else
+                "${cfg.som}-board-spec.txt"
+            );
             description = ''
               Path to the board-spec.txt file passed to `fskp_fuseburn.py` via `--board-spec`.
               Defaults can be found in the bsp repo at `tools/flashtools/fuseburn/*-board-spec.txt`.
@@ -465,8 +472,8 @@ in
 
     assertions = [
       {
-        assertion = !cfg.firmware.fskp.enable || (cfg.som != null && lib.hasPrefix "thor-" cfg.som);
-        message = "FSKP support currently limited to Thor-family boards";
+        assertion = !cfg.firmware.fskp.enable || (lib.versionAtLeast cfg.majorVersion "7");
+        message = "FSKP support currently limited to Jetpack 7+ boards";
       }
       {
         assertion = (cfg.firmware.fskp.enable && (cfg.firmware.fskp.fuseBlob ? insecureClearText) -> cfg.firmware.fskp.fuseBlob.insecureClearText);
@@ -478,8 +485,8 @@ in
       }
     ];
 
-    # On thor, fskpFuseScript is the preferred method for fusing so enable it by default.
-    hardware.nvidia-jetpack.firmware.fskp.enable = lib.mkDefault (lib.hasPrefix "thor-" cfg.som);
+    # On jetpack 7, fskpFuseScript is the supported method for fusing so enable it by default.
+    hardware.nvidia-jetpack.firmware.fskp.enable = lib.mkDefault (lib.versionAtLeast cfg.majorVersion "7");
 
     # These are from l4t_generate_soc_bup.sh, plus some additional ones found in the wild.
     hardware.nvidia-jetpack.firmware.variants =

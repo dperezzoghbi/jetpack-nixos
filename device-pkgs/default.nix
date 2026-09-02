@@ -177,10 +177,10 @@ let
           LDK_DIR="$(realpath .)"
           export LDK_DIR
 
-          cd l4t/tools/flashtools/fuseburn
+          cd tools/flashtools/fuseburn
           ./fskp_fuseburn.py \
             --board-spec ${lib.escapeShellArg "${cfg.firmware.fskp.boardSpecFile}"} \
-            -B ${lib.escapeShellArg "../../../../${cfg.firmware.fskp.boardConfigFilename}"} \
+            -B ${lib.escapeShellArg "../../../${cfg.firmware.fskp.boardConfigFilename}"} \
             -c ${chipId} \
             ${if cfg.firmware.fskp.fuseBlob ? encrypted then
               lib.concatStringsSep " " [
@@ -196,6 +196,21 @@ let
       '';
       dtbsDir = config.hardware.deviceTree.package;
     };
+    # Board config file must be located in the BSP due to assumptions about relative paths and
+    # sourcing other files from it.
+    derivationArgs.postCheck = ''
+      if ! [[ \
+        -e "$(realpath ${lib.escapeShellArg "${nvidia-jetpack.flash-tools}/tools/flashtools/fuseburn/${cfg.firmware.fskp.boardSpecFile}"})" || \
+        -e ${lib.escapeShellArg "${cfg.firmware.fskp.boardSpecFile}"} \
+      ]]; then
+        echo "ERROR: board spec file ${lib.escapeShellArg "${cfg.firmware.fskp.boardSpecFile}"} not found" >&2
+        exit 1
+      fi
+      if ! [ -e "$(realpath ${lib.escapeShellArg "${nvidia-jetpack.flash-tools}/${cfg.firmware.fskp.boardConfigFilename}"})" ]; then
+        echo "ERROR: board config file ${lib.escapeShellArg "${cfg.firmware.fskp.boardConfigFilename}"} not found relative to BSP root dir" >&2
+        exit 1
+      fi
+    '';
     meta.platforms = [ "x86_64-linux" ];
   };
 

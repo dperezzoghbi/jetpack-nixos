@@ -80,12 +80,13 @@ in
 
         bspHash = "sha256-LlYZCIuojoXaslJH8DPXBlm29nb/g1F2oHdm3LD9vms=";
         bspPrePatch = ''
-          cp --no-preserve=all -r ${hostOverlayFskpTools}/Linux_for_Tegra/. ./
-          find ${hostOverlayFskpTools}/Linux_for_Tegra/. -type f -perm -u+x -printf '%P\0' \
+          overlayRoot=${hostOverlayFskpTools}/Linux_for_Tegra/l4t
+          cp --no-preserve=all -r "$overlayRoot"/. ./
+          find "$overlayRoot"/. -type f -perm -u+x -printf '%P\0' \
             | xargs -0 -I{} chmod +x "./{}"
 
           # Remove NVIDIA's bundled pyusb so we use nix's version. See `fskp_helper_t264.py`.
-          find l4t/tools/flashtools -type d -name pyusb -path '*/external/pyusb' -exec rm -rf {} +
+          find tools/flashtools -type d -name pyusb -path '*/external/pyusb' -exec rm -rf {} +
         '';
         bspPatches = [
           ./pkgs/r38-bsp.patch
